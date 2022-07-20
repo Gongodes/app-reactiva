@@ -50,7 +50,8 @@ public class ProductoController {
         }).delayElements(Duration.ofSeconds(1));
 
         productos.subscribe(prod -> log.info(prod.getNombre()));
-        model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+        model.addAttribute("productos",
+                new ReactiveDataDriverContextVariable(productos, 1));
         model.addAttribute("titulo", "Listado de Productos");
 
         return "listar";
@@ -68,7 +69,8 @@ public class ProductoController {
         }).repeat(5000);
 
 
-        model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+        model.addAttribute("productos",
+                new ReactiveDataDriverContextVariable(productos, 1));
         model.addAttribute("titulo", "Listado de Productos");
 
         return "listar";
@@ -87,7 +89,8 @@ public class ProductoController {
         }).repeat(5000);
 
 
-        model.addAttribute("productos", new ReactiveDataDriverContextVariable(productos, 1));
+        model.addAttribute("productos",
+                new ReactiveDataDriverContextVariable(productos, 1));
         model.addAttribute("titulo", "Listado de Productos");
 
         return "listar-chunked";
