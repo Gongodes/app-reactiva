@@ -1,6 +1,8 @@
 package cl.gonzalo.app.services;
 
+import cl.gonzalo.app.dao.CategoriaDao;
 import cl.gonzalo.app.dao.ProductoDao;
+import cl.gonzalo.app.documents.Categoria;
 import cl.gonzalo.app.documents.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ public class ProductoServiceImpl implements  ProductoService{
 
     @Autowired
     private ProductoDao dao;
+    @Autowired
+    private CategoriaDao catDao;
 
     @Override
     public Flux<Producto> findAllConNombreUpperCase() {
@@ -46,5 +50,20 @@ public class ProductoServiceImpl implements  ProductoService{
     @Override
     public Mono<Void> delete(Producto producto) {
         return dao.delete(producto);
+    }
+
+    @Override
+    public Flux<Categoria> findAllCategoria() {
+        return catDao.findAll();
+    }
+
+    @Override
+    public Mono<Categoria> findCategoriaById(String id) {
+        return catDao.findById(id);
+    }
+
+    @Override
+    public Mono<Categoria> save(Categoria categoria) {
+        return catDao.save(categoria);
     }
 }

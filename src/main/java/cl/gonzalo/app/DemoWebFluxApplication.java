@@ -1,15 +1,14 @@
 package cl.gonzalo.app;
 
-import cl.gonzalo.app.dao.ProductoDao;
+
+import cl.gonzalo.app.documents.Categoria;
 import cl.gonzalo.app.documents.Producto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cl.gonzalo.app.services.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 
 import java.util.Date;
@@ -17,9 +16,11 @@ import java.util.Date;
 @SpringBootApplication
 public class DemoWebFluxApplication implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(DemoWebFluxApplication.class);
+
     @Autowired
-    private ProductoDao dao;
+    private ProductoService service;
+
+
 
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
@@ -32,19 +33,26 @@ public class DemoWebFluxApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         mongoTemplate.dropCollection("productos").subscribe();
+        mongoTemplate.dropCollection("categorias").subscribe();
 
-        Flux.just(
-                new Producto("Tv Panasonic", 156.000),
-                new Producto("Camara Sony", 126.000),
-                new Producto("Notebook Hp", 356.000),
-                new Producto("Mouse Mac", 6.000),
-                new Producto("Escritorio Gamer", 466.000)
+        Categoria electronico = new Categoria("Electronico");
+        Categoria deporte = new Categoria("Deporte");
+        Categoria computacion = new Categoria("Computacion");
+        Categoria muebles = new Categoria("Muebles");
 
-        ).flatMap(producto -> {
-            producto.setCreateAt(new Date());
-            return dao.save(producto);
-        }).subscribe(producto -> log.info("insert: " +
-                producto.getId() + " " +
-                producto.getNombre()));
+        Flux.just(electronico,computacion,deporte,muebles)
+                .flatMap(service::save).thenMany( Flux.just(
+                        new Producto("Tv Panasonic", 156.000,electronico),
+                        new Producto("Camara Sony", 126.000,electronico),
+                        new Producto("Notebook Hp", 356.000,computacion),
+                        new Producto("Mouse Mac", 6.000,computacion),
+                        new Producto("Escritorio Gamer", 466.000,muebles)
+
+                ).flatMap(producto -> {
+                    producto.setCreateAt(new Date());
+                    return service.save(producto);
+                }))
+
+       .subscribe();
     }
 }
