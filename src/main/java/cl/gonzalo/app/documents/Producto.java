@@ -16,14 +16,13 @@ import java.util.Date;
 @Document(collection = "productos")
 public class Producto {
 
+
     @Id
-
     private String id;
-
     @NotEmpty
     private String nombre;
     @NotNull
-    private Double precio;
+    private Integer precio;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createAt;
     @Valid
@@ -33,14 +32,14 @@ public class Producto {
 
 
 
-    public Producto(String nombre, Double precio) {
+    public Producto(String nombre, Integer precio) {
         this.nombre = nombre;
         this.precio = precio;
     }
 
-
-    public Producto(String nombre, Double precio,Categoria categoria) {
-        this(nombre, precio);
+    public Producto(String nombre, Integer precio, Categoria categoria) {
+        this.nombre = nombre;
+        this.precio = precio;
         this.categoria = categoria;
     }
 }

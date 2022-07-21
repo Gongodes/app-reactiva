@@ -3,6 +3,7 @@ package cl.gonzalo.app;
 
 import cl.gonzalo.app.documents.Categoria;
 import cl.gonzalo.app.documents.Producto;
+
 import cl.gonzalo.app.services.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -42,11 +43,11 @@ public class DemoWebFluxApplication implements CommandLineRunner {
 
         Flux.just(electronico,computacion,deporte,muebles)
                 .flatMap(service::save).thenMany( Flux.just(
-                        new Producto("Tv Panasonic", 156.000,electronico),
-                        new Producto("Camara Sony", 126.000,electronico),
-                        new Producto("Notebook Hp", 356.000,computacion),
-                        new Producto("Mouse Mac", 6.000,computacion),
-                        new Producto("Escritorio Gamer", 466.000,muebles)
+                        new Producto("Tv Panasonic", 156000,electronico),
+                        new Producto("Camara Sony", 126000,electronico),
+                        new Producto("Notebook Hp", 356000,computacion),
+                        new Producto("Mouse Mac", 600000,computacion),
+                        new Producto("Escritorio Gamer", 466000,muebles)
 
                 ).flatMap(producto -> {
                     producto.setCreateAt(new Date());
